@@ -32,9 +32,7 @@ defmodule MyappWeb.ProductLive.FormComponent do
 
     Task.async(fn ->
       result =
-        HTTPoison.get('http://slowwly.robertomurray.co.uk/delay/2000/url/http://www.google.co.uk')
-
-      Process.sleep(500)
+        HTTPoison.get('http://slowwly.robertomurray.co.uk/delay/250/url/http://www.google.co.uk')
 
       {:result, socket.assigns.myself, result}
     end)

@@ -1,7 +1,7 @@
 <h1>Listing Products</h1>
 
 <%= if @live_action in [:new, :edit] do %>
-  <%= live_modal @socket, MyappWeb.ProductLive.FormComponent,
+  <%= live_component @socket, MyappWeb.ProductLive.FormComponent,
     id: @product.id || :new,
     title: @page_title,
     action: @live_action,
