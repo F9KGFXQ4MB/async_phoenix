@@ -19,8 +19,7 @@ defmodule MyappWeb.ProductLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:changeset, changeset)
-     |> assign(:refreshing, false)}
+     |> assign(:changeset, changeset)}
   end
 
   @impl true
@@ -34,7 +33,7 @@ defmodule MyappWeb.ProductLive.FormComponent do
       result =
         HTTPoison.get('http://slowwly.robertomurray.co.uk/delay/250/url/http://www.google.co.uk')
 
-      {:result, socket.assigns.myself, result}
+      {:result, socket.assigns.id, result}
     end)
 
     socket =
