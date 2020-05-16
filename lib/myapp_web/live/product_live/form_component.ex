@@ -4,6 +4,15 @@ defmodule MyappWeb.ProductLive.FormComponent do
   alias Myapp.Products
 
   @impl true
+  def mount(socket) do
+    {:ok, assign(socket, :refreshing, false)}
+  end
+
+  def update(%{refreshing: refreshing}, socket) do
+    {:ok, assign(socket, :refreshing, refreshing)}
+  end
+
+  @impl true
   def update(%{product: product} = assigns, socket) do
     changeset = Products.change_product(product)
 
@@ -22,10 +31,20 @@ defmodule MyappWeb.ProductLive.FormComponent do
       |> Map.put(:action, :validate)
 
     Task.async(fn ->
-      HTTPoison.get('http://slowwly.robertomurray.co.uk/delay/2000/url/http://www.google.co.uk')
+      result =
+        HTTPoison.get('http://slowwly.robertomurray.co.uk/delay/2000/url/http://www.google.co.uk')
+
+      Process.sleep(500)
+
+      {:result, socket.assigns.myself, result}
     end)
 
-    {:noreply, assign(socket, :changeset, changeset)}
+    socket =
+      socket
+      |> assign(refreshing: true)
+      |> assign(changeset: changeset)
+
+    {:noreply, socket}
   end
 
   def handle_event("save", %{"product" => product_params}, socket) do
