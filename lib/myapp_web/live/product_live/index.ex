@@ -3,6 +3,7 @@ defmodule MyappWeb.ProductLive.Index do
 
   alias Myapp.Products
   alias Myapp.Products.Product
+  alias MyappWeb.ProductLive.FormComponent
 
   @impl true
   def mount(_params, _session, socket) do
@@ -40,18 +41,18 @@ defmodule MyappWeb.ProductLive.Index do
     {:noreply, assign(socket, :products, fetch_products())}
   end
 
-  def handle_info({_, result}, socket) do
+  def handle_info({_, {:result, component_id, _http_result}}, socket) do
     require Logger
     Logger.error("Received")
 
-    send_update(FormComponent, id: "product-form", refreshing: false)
+    send_update(FormComponent, id: component_id, refreshing: false)
+
     {:noreply, socket}
   end
 
-  def handle_info({:DOWN, _, :process, _,  :normal}, socket) do
+  def handle_info({:DOWN, _, :process, _, :normal}, socket) do
     {:noreply, socket}
   end
-
 
   defp fetch_products do
     Products.list_products()
