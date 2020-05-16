@@ -25,7 +25,10 @@ defmodule MyappWeb.ProductLive.FormComponent do
       HTTPoison.get('http://slowwly.robertomurray.co.uk/delay/2000/url/http://www.google.co.uk')
     end)
 
-    {:noreply, assign(socket, :changeset, changeset)}
+    {:noreply, 
+      socket
+      |> assign(:changeset, changeset)
+      |> assign(:refreshing, true)}
   end
 
   def handle_event("save", %{"product" => product_params}, socket) do
